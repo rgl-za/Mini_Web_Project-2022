@@ -1,6 +1,6 @@
-<%@ page import = "dao.BoardDaoImpl" %>
-<%@ page import = "dao.BoardDao" %>
-<%@ page import = "vo.BoardVo" %>
+<%@ page import = "com.kosta.jhj.dao.BoardDaoImpl" %>
+<%@ page import = "com.kosta.jhj.dao.BoardDao" %>
+<%@ page import = "com.kosta.jhj.vo.BoardVo" %>
 <%@ page import = "java.io.IOException" %>
 <%@ page import = "java.io.File" %>
 <%@ page import = "java.util.ArrayList" %>
@@ -24,6 +24,8 @@
 		
 		<div id="content">
 			<div id="board">
+			<!-- 기본적으로 파일 첨부할 수 있는 API: input 태그의 type 속 값을 FILE로 지정, 
+											  이때 form태그의 method 속성이 post, enctype 속성이 multipart/form-data -->
 				<form class="board-form" method="post" action="/mysite/board?a=write" enctype="multipart/form-data">
 					<input type ="hidden" name = "a" value="write">
 					<table class="tbl-ex">

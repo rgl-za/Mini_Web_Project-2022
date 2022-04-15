@@ -1,48 +1,12 @@
-<%@ page import = "dao.BoardDaoImpl" %>
-<%@ page import = "dao.BoardDao" %>
-<%@ page import = "vo.BoardVo" %>
+<%@ page import = "com.kosta.jhj.dao.BoardDaoImpl" %>
+<%@ page import = "com.kosta.jhj.dao.BoardDao" %>
+<%@ page import = "com.kosta.jhj.vo.BoardVo" %>
 <%@ page import = "java.util.ArrayList" %>
 <%@ page import = "java.util.List" %>
 <%@ page import="java.io.PrintWriter"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<% 
-	/* BoardDaoImpl dao = new BoardDaoImpl();
-	String strPg = request.getParameter("pg");
-	
-	System.out.println(strPg); // 얘를 어디서 받아와야 하지... 
-	
-	int rowSize = 10;
-	int pg = 1;
-	
-	if(strPg != null){
-		pg = Integer.parseInt(strPg);
-	}
-	
-	int from = (pg * rowSize) - (rowSize-1);
-	int to = (pg * rowSize);
-	
-	List<BoardVo> list = dao.getList(from, to);
-	
-	int total = dao.getTotal();
-	int allPage = (int) Math.ceil(total/(double)rowSize);
-	int block = 10;
-	
-	System.out.println("전체 페이지수 : "+allPage);
-	System.out.println("현재 페이지 : "+ strPg);
-	 
-	int fromPage = ((pg-1)/block*block)+1;  //보여줄 페이지의 시작
-	int toPage = ((pg-1)/block*block)+block; //보여줄 페이지의 끝
-	if(toPage> allPage){ // 예) 20>17
-		toPage = allPage;
-	}
-	   
-	System.out.println("페이지시작 : "+fromPage+ " / 페이지 끝 :"+toPage);    
-	
-	pageContext.setAttribute("list", list); */
-
-%>
 
 <!DOCTYPE html>
 <html>
@@ -61,6 +25,7 @@
 			<div id="board">
 				<form id="search_form" action="/mysite/board" method="post">
 					<input type="hidden" name="a" value="search">
+					<!-- 검색 조건 옵션 -->
 					<select style="heiht:30px" name="field">
 						<option value = "0">선택</option>
 						<option value = "userName">글쓴이</option>
@@ -100,7 +65,10 @@
 				<div class="pager">
 					<ul>
 					
-					<c:if test="${pg>block}">
+					<c:if test="${pg>block}"> <!-- 처음, 이전 링크 -->
+						<!-- list와 search를 따로 표현하였으나 페이징 버튼은 같은 것을 쓰기 때문에 상황에 따라 분기하도록 삼항 연산자 사용 -->
+						<!-- search 후 처음에는 input으로 값이 들어오지만 페이징 버튼을 누르면 input이 없기 때문에 
+							 kwd 값에 null이 들어가면서 검색 기능에 문제가 생기므로 field와 kwd도 받아오도록 구현 -->
 						<li><a href="/mysite/board?a=${null eq a ? 'list' : 'search' }&pg=1&field=${field}&kwd=${kwd}">◀◀</a></li>
                 		<li><a href="/mysite/board?a=${null eq a ? 'list' : 'search' }&pg=${fromPage-1}&field=${field}&kwd=${kwd}">◀</a></li>
                 	</c:if>
@@ -116,7 +84,7 @@
 					</c:forEach>
 					
 				
-					<c:if test="${toPage<allPage}">
+					<c:if test="${toPage<allPage}"> <!-- 다음, 이후 링크 -->
 						<li><a href="/mysite/board?a=${null eq a ? 'list' : 'search' }&pg=${toPage+1}&field=${field}&kwd=${kwd}">▶</a></li>
                 		<li><a href="/mysite/board?a=${null eq a ? 'list' : 'search' }&pg=${allPage}&field=${field}&kwd=${kwd}">▶▶</a></li>
 					</c:if>
